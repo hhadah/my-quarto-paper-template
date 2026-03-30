@@ -1,0 +1,266 @@
+<!-- _content.qmd: Shared manuscript body, included by working-paper.qmd
+     and manuscript.qmd. The setup chunk below defines cross_format_table()
+     which is then available to every subsequent chunk. -->
+
+```{r}
+#| label: setup
+#| include: false
+
+# ── Install missing packages if needed ───────────────────────────────────────
+if (!requireNamespace("knitr", quietly = TRUE)) {
+  install.packages("knitr", repos = "https://cloud.r-project.org")
+}
+if (!requireNamespace("kableExtra", quietly = TRUE)) {
+  install.packages("kableExtra", repos = "https://cloud.r-project.org")
+}
+
+library(knitr)
+library(kableExtra)
+
+# ── detect_format() ─────────────────────────────────────────────────────────
+# Returns "latex", "html", or "docx" depending on the current render target.
+detect_format <- function() {
+  fmt <- knitr::opts_knit$get("rmarkdown.pandoc.to")
+  if (is.null(fmt)) {
+    return("html")
+  }
+  if (grepl("latex|pdf|beamer", fmt, ignore.case = TRUE)) {
+    return("latex")
+  }
+  if (grepl("html", fmt, ignore.case = TRUE)) {
+    return("html")
+  }
+  return("docx")
+}
+
+# ── cross_format_table() ────────────────────────────────────────────────────
+# Renders a data frame as a publication-ready table in PDF, HTML, or Word.
+# Captions are handled by Quarto via tbl-cap in chunk options — do NOT
+# pass captions here.
+#
+# Arguments:
+#   df        — a data frame
+#   notes     — character vector of footnotes
+#   align     — column alignment string (e.g. "lccc")
+#   col_names — custom column headers (defaults to names(df))
+#   escape    — escape special characters? (default TRUE)
+#
+# Usage (in any chunk with #| tbl-cap: "My Caption"):
+#   cross_format_table(my_df, notes = c("A note."))
+# ─────────────────────────────────────────────────────────────────────────────
+cross_format_table <- function(df,
+                               notes     = NULL,
+                               align     = NULL,
+                               col_names = NULL,
+                               escape    = TRUE) {
+
+  fmt    <- detect_format()
+  cnames <- if (!is.null(col_names)) col_names else names(df)
+
+  if (fmt == "latex") {
+    # ── PDF / LaTeX ────────────────────────────────────────────────────────
+    # Do NOT pass caption here — Quarto adds its own caption via tbl-cap
+    # in the chunk options. Passing caption to kable() would create a
+    # duplicate (Table 1 from Quarto + Table 2 from kable).
+    tbl <- knitr::kable(
+      df,
+      format    = "latex",
+      booktabs  = TRUE,
+      escape    = escape,
+      align     = align,
+      col.names = cnames
+    )
+    tbl <- kableExtra::kable_styling(
+      tbl,
+      latex_options = c("HOLD_position"),
+      font_size     = 11
+    )
+    if (!is.null(notes)) {
+      tbl <- kableExtra::footnote(
+        tbl,
+        number            = notes,
+        footnote_as_chunk = FALSE,
+        escape            = FALSE
+      )
+    }
+    return(tbl)
+
+  } else if (fmt == "html") {
+    # ── HTML ───────────────────────────────────────────────────────────────
+    # Same: skip caption here, let Quarto handle it via tbl-cap.
+    tbl <- knitr::kable(
+      df,
+      format    = "html",
+      escape    = escape,
+      col.names = cnames
+    )
+    tbl <- kableExtra::kable_styling(
+      tbl,
+      bootstrap_options = c("striped", "hover", "condensed"),
+      full_width        = FALSE,
+      position          = "center"
+    )
+    if (!is.null(notes)) {
+      tbl <- kableExtra::footnote(
+        tbl,
+        number            = notes,
+        footnote_as_chunk = FALSE
+      )
+    }
+    return(tbl)
+
+  } else {
+    # ── Word / docx ────────────────────────────────────────────────────────
+    # Same: skip caption, Quarto handles it.
+    tbl <- knitr::kable(df, col.names = cnames)
+    return(tbl)
+  }
+}
+```
+
+
+# Introduction
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. This template demonstrates how to structure an academic paper using Quarto with the hikmah extensions. The paper renders to PDF, HTML, and Word from the same source file.
+
+The motivation for this research is [describe your motivation here]. Prior literature has examined [briefly review the literature, citing key works such as @example-article and @example-book]. However, [identify the gap in the literature that your paper addresses].
+
+This paper makes three contributions. First, [describe your first contribution]. Second, [describe your second contribution]. Third, [describe your third contribution].
+
+The remainder of the paper is organized as follows. @sec-data describes the data and identification strategy. @sec-results presents the main findings. @sec-discussion discusses the implications, and @sec-conclusion concludes.
+
+
+# Data {#sec-data}
+
+Describe your data source here. For example: "The analysis uses data from [Source Name] covering the years [start year] to [end year]."
+
+
+## Summary Statistics
+
+```{r}
+#| label: tbl-summary
+#| tbl-cap: "Summary Statistics"
+
+summary_df <- data.frame(
+  Variable = c("Age", "Income (log)", "Education (years)",
+               "Employment Rate", "SES Index"),
+  Mean     = c("35.20", "10.45", "13.80", "0.72", "0.00"),
+  SD       = c("12.10", "1.23",  "3.20",  "0.45", "1.00"),
+  Min      = c("18",    "6.21",  "0",     "0",    "-2.85"),
+  Max      = c("65",    "14.50", "21",    "1",    "3.12"),
+  N        = c("10,000","9,850", "10,000","10,000","9,500")
+)
+
+cross_format_table(
+  summary_df,
+  align     = "lccccc",
+  notes     = c("Source: Your data source here.",
+                "Sample restricted to ages 18-65.")
+)
+```
+
+
+## Balance Table
+
+```{r}
+#| label: tbl-balance
+#| tbl-cap: "Balance Table: Treatment vs. Control"
+
+balance_df <- data.frame(
+  Variable   = c("Age", "Female", "College Degree",
+                  "Income (log)", "Married"),
+  Treatment  = c("34.8", "0.51", "0.42", "10.52", "0.58"),
+  Control    = c("35.1", "0.49", "0.40", "10.48", "0.56"),
+  Difference = c("-0.30", "0.02", "0.02", "0.04", "0.02"),
+  pvalue     = c("0.42", "0.55", "0.61", "0.38", "0.67")
+)
+
+cross_format_table(
+  balance_df,
+  align     = "lcccc",
+  col_names = c("Variable", "Treatment", "Control", "Difference", "p-value"),
+  notes     = c("Differences tested using two-sample t-tests.",
+                "None are statistically significant at the 10 percent level.")
+)
+```
+
+
+# Results {#sec-results}
+
+## Main Estimates
+
+```{r}
+#| label: tbl-results
+#| tbl-cap: "Effect of Treatment on Outcome"
+
+results_df <- data.frame(
+  Term    = c("Treatment", "", "Age", "", "Female", "",
+              "College", "", "Observations", "R-squared",
+              "Year FE", "State FE"),
+  Model1  = c("0.052**", "(0.024)", "", "", "", "",
+              "", "", "10,000", "0.12", "No", "No"),
+  Model2  = c("0.048**", "(0.023)", "0.003", "(0.002)",
+              "0.015", "(0.018)", "", "",
+              "10,000", "0.15", "Yes", "No"),
+  Model3  = c("0.041*", "(0.022)", "0.002", "(0.002)",
+              "0.012", "(0.017)", "0.089***", "(0.021)",
+              "10,000", "0.21", "Yes", "Yes")
+)
+
+cross_format_table(
+  results_df,
+  align     = "lccc",
+  col_names = c("", "(1)", "(2)", "(3)"),
+  notes     = c("Standard errors in parentheses.",
+                "Significance: * p < 0.10, ** p < 0.05, *** p < 0.01.",
+                "All models estimated by OLS."),
+  escape    = FALSE
+)
+```
+
+
+## Robustness Checks
+
+[Describe your robustness checks here.]
+
+```{r}
+#| label: tbl-robustness
+#| tbl-cap: "Robustness Checks"
+
+robust_df <- data.frame(
+  Specification = c("Baseline", "Drop outliers", "Alternative outcome",
+                    "Placebo test", "Matched sample"),
+  Coefficient   = c("0.052", "0.049", "0.038", "-0.004", "0.055"),
+  StdError      = c("(0.024)", "(0.025)", "(0.020)", "(0.023)", "(0.027)"),
+  N             = c("10,000", "9,200", "10,000", "10,000", "6,400")
+)
+
+cross_format_table(
+  robust_df,
+  align     = "lccc",
+  col_names = c("Specification", "Coefficient", "Std. Error", "N"),
+  notes     = c("All specifications include the full set of controls and fixed effects.",
+                "Standard errors in parentheses.")
+)
+```
+
+
+## Heterogeneity Analysis
+
+[Describe any subgroup analyses here.]
+
+
+# Discussion {#sec-discussion}
+
+[Discuss the implications of your findings.]
+
+
+# Conclusion {#sec-conclusion}
+
+[Summarize your main findings, contributions, and policy implications.]
+
+
+# References {.unnumbered}
+
+::: {#refs}
+:::

@@ -1,0 +1,31 @@
+# Rendered output
+*.pdf
+*.html
+*.docx
+*.tex
+!my_paper/tables/*.tex
+
+# R
+.Rhistory
+.Rdata
+.RData
+.Rproj.user
+*.Rproj
+
+# Data (large files — track with git-lfs or keep out of repo)
+data/datasets/*.csv.gz
+data/datasets/*.csv
+data/raw/*.csv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Quarto cache
+*_cache/
+*_files/
+.quarto/

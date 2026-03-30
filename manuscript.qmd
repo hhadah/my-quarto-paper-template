@@ -1,0 +1,64 @@
+---
+title: "Your Paper Title Here"
+short-title: "Short Title"
+date: today
+author:
+  - name: Your Name
+    email: your.email@university.edu
+    url: https://yourwebsite.com
+    orcid: 0000-0000-0000-0000
+    affiliations:
+      - name: Your University
+        department: Department of Your Field
+        attributes:
+          corresponding: true
+  # Uncomment below to add co-authors:
+  # - name: Co-Author Name
+  #   email: coauthor@university.edu
+  #   affiliations:
+  #     - name: Their University
+  #       department: Their Department
+abstract: |
+  Write your abstract here. This should be a concise summary of your paper,
+  typically 150--250 words. It should state the research question, data,
+  methods, key findings, and contribution.
+thanks: |
+  I thank [acknowledgments here]. All errors are my own.
+keywords:
+  - keyword1
+  - keyword2
+  - keyword3
+bibliography: references.bib
+format:
+  # ── PDF (manuscript/submission style) ──────────────────────
+  # Double-spaced, numbered lines — suitable for journal submission
+  # Render: quarto render manuscript.qmd --to hikmah-manuscript-pdf
+  hikmah-manuscript-pdf:
+    toc: false
+    number-sections: true
+    keep-tex: true
+    include-in-header:
+      text: |
+        \usepackage{threeparttable}
+        \usepackage{threeparttablex}
+        \usepackage{longtable}
+        \usepackage{booktabs}
+  # ── HTML (self-contained) ──────────────────────────────────
+  # Render: quarto render manuscript.qmd --to html
+  html:
+    toc: true
+    number-sections: true
+    self-contained: true
+  # ── Word (docx) ───────────────────────────────────────────
+  # Render: quarto render manuscript.qmd --to docx
+  docx:
+    toc: true
+    number-sections: true
+knitr:
+  opts_chunk:
+    echo: false
+    message: false
+    warning: false
+---
+
+{{< include _content.qmd >}}

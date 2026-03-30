@@ -1,0 +1,78 @@
+---
+title: "Response to Reviewers: Your Paper Title"
+author:
+  - name: Your Name
+    affiliations:
+      - name: Your University
+        department: Department of Your Field
+    email: your.email@university.edu
+    url: https://yourwebsite.com
+date: today
+bibliography: references.bib
+format:
+  # ── PDF (Typst-based response document) ────────────────────
+  # Uses the hikmah-response extension for clean formatting
+  # Reviewer comments appear in red, manuscript excerpts in blue
+  # Render: quarto render response.qmd --to hikmah-response-typst
+  hikmah-response-typst: default
+  # ── HTML ───────────────────────────────────────────────────
+  # Render: quarto render response.qmd --to html
+  html:
+    toc: true
+    self-contained: true
+  # ── Word (docx) ───────────────────────────────────────────
+  # Render: quarto render response.qmd --to docx
+  docx: default
+---
+
+Dear Editor and Reviewers,
+
+Thank you for your thoughtful comments and suggestions. Below I address each point raised. Reviewer comments are shown in red and excerpts from the manuscript are shown in blue.
+
+# Reviewer 1
+
+::: {.reviewer}
+Paste the reviewer's first comment here.
+:::
+
+::: {.response}
+Write your response here. You can reference specific changes you made to
+the manuscript, cite literature with @citation-key, or point to specific
+sections or figures.
+:::
+
+::: {.reviewer}
+Paste the reviewer's second comment here.
+:::
+
+::: {.response}
+Your response to the second comment goes here.
+:::
+
+# Reviewer 2
+
+::: {.reviewer}
+Paste Reviewer 2's first comment here.
+:::
+
+::: {.response}
+Your response goes here.
+:::
+
+::: {.reviewer}
+Paste Reviewer 2's second comment here.
+:::
+
+::: {.response}
+Your response goes here.
+:::
+
+# Editor
+
+::: {.reviewer}
+Paste any editor comments here.
+:::
+
+::: {.response}
+Your response to the editor's comments goes here.
+:::
