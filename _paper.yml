@@ -1,0 +1,14 @@
+# Paper information — shared by working-paper.qmd and manuscript.qmd.
+# Edit once here; every document picks it up.
+title: "Your Paper Title Here"
+short-title: "Short Title"
+abstract: |
+  Write your abstract here. This should be a concise summary of your paper,
+  typically 150--250 words. It should state the research question, data,
+  methods, key findings, and contribution.
+thanks: |
+  I thank [acknowledgments here]. All errors are my own.
+keywords:
+  - keyword1
+  - keyword2
+  - keyword3

@@ -1,12 +1,7 @@
 ---
 title: "Response to Reviewers: Your Paper Title"
-author:
-  - name: Your Name
-    affiliations:
-      - name: Your University
-        department: Department of Your Field
-    email: your.email@university.edu
-    url: https://yourwebsite.com
+metadata-files:
+  - _authors.yml
 date: today
 bibliography: references.bib
 format:
@@ -37,7 +32,7 @@ Paste the reviewer's first comment here.
 
 ::: {.response}
 Write your response here. You can reference specific changes you made to
-the manuscript, cite literature with @citation-key, or point to specific
+the manuscript, cite literature with `@citation-key` (e.g., @example-article), or point to specific
 sections or figures.
 :::
 

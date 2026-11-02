@@ -10,6 +10,9 @@ my-quarto-paper-template/
 ├── manuscript.qmd           # Journal submission (PDF/HTML/Word)
 ├── response.qmd             # Response to reviewers (PDF/HTML/Word)
 ├── _content.qmd             # Shared body (included by both .qmd above)
+├── _paper.yml               # Title, short title, abstract, keywords (shared)
+├── _authors.yml             # Author block (shared by all three documents)
+├── new-paper.sh             # Starts a new paper from this template
 ├── references.bib           # BibTeX bibliography
 ├── figure/                  # Figures referenced by the paper
 ├── tables/                  # LaTeX .tex tables (for PDF)
@@ -19,6 +22,34 @@ my-quarto-paper-template/
         ├── hikmah-manuscript/     # Manuscript submission PDF template
         └── hikmah-response/       # Response to reviewers (Typst)
 ```
+
+## Starting a new paper
+
+Run the script from anywhere (VS Code's terminal works):
+
+```bash
+~/Projects/GiT/my-quarto-paper-template/new-paper.sh ~/Projects/GiT/my-new-paper "Paper Title" "Short Title"
+```
+
+It copies the template's committed files into the new folder, fills in the title, fills your name and email from `git config` (or copies `~/.config/quarto-paper/_authors.yml` if you saved a full author block there), starts a fresh git repo, and opens the folder in VS Code. Leave out the title and it asks for one.
+
+To call it as `new-paper` from any terminal, add an alias to `~/.zshrc`:
+
+```bash
+alias new-paper="$HOME/Projects/GiT/my-quarto-paper-template/new-paper.sh"
+```
+
+The script copies the latest *commit*, so commit any changes to the template before starting a paper.
+
+Alternatively, Quarto's built-in command copies the template into the current folder (no git init, title, or authors):
+
+```bash
+quarto use template hhadah/my-quarto-paper-template
+```
+
+### Where to edit paper details
+
+Title, abstract, keywords, and acknowledgments live in `_paper.yml`; authors live in `_authors.yml`. `working-paper.qmd`, `manuscript.qmd`, and `response.qmd` read them through `metadata-files:`, so you edit each detail once. A field set in a document's own front matter overrides the shared value (that is how `response.qmd` keeps its own title).
 
 ## Prerequisites
 

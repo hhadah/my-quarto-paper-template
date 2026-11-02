@@ -4,6 +4,9 @@
 *.docx
 *.tex
 !my_paper/tables/*.tex
+!tables/*.tex
+# Quarto extensions ship their own .tex/.docx files — always track them
+!_extensions/**
 
 # R
 .Rhistory
